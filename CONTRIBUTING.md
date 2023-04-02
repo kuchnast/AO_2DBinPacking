@@ -21,7 +21,10 @@ Install development packages.
 > pip install -r dev-requirements.txt
 
 In order to run tests:
-> tox -e black-check,mypy,py3,flake8
+> tox -e black-check,mypy,flake8
 
-Before submitting pull request to automatically format source files:
+To run just type command:
+> bin_packing_2d
+
+Before submitting automatically format source files:
 >tox -e black

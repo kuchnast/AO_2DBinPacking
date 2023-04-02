@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 write_to = "_version.py"
 
 [tool.mypy]
-mypy_path = "src
+mypy_path = "src"
 
 [tool.black]
 line-length = 120
