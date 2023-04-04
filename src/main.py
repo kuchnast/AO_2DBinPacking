@@ -8,13 +8,25 @@ def main(parameters: Optional[Sequence[str]] = None):
     parser = argparse.ArgumentParser()
     parser.set_defaults(action=run)
     parser.add_argument("-v", "--version", action="version", version=f"bin_packing_2d {__version__}")
-    parser.add_argument("-i", "--input", type=str, nargs="?", dest="input", default=None, required=True,
-                        help="Input file")
-    parser.add_argument("-a", "--algorithm", type=str, nargs="?", dest="algorithm", default="All",
-                        help="Algorithm that will be executed or all if not set")
+    parser.add_argument(
+        "-i", "--input", type=str, nargs="?", dest="input", default=None, required=True, help="Input file"
+    )
+    parser.add_argument(
+        "-a",
+        "--algorithm",
+        type=str,
+        nargs="?",
+        dest="algorithm",
+        default="All",
+        help="Algorithm that will be executed or all if not set",
+    )
     args = parser.parse_args(parameters)
     args.action(args)
 
 
 def run(args):
     print(args.input)
+
+
+if __name__ == "__main__":
+    main()

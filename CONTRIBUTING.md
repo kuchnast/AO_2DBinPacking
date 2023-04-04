@@ -17,6 +17,7 @@ Now activate it.
 ### Windows
 >.\venv\Scripts\activate.bat
 
+### What next
 Install development packages.
 > pip install -r dev-requirements.txt
 
