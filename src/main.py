@@ -1,5 +1,6 @@
 import argparse
 from typing import Optional, Sequence
+from turtle import *
 
 __version__ = "1.0.0"
 
@@ -30,3 +31,12 @@ def run(args):
 
 if __name__ == "__main__":
     main()
+
+    color('red', 'yellow')
+    begin_fill()
+    forward(100)
+    left(200)
+    forward(100)
+    left(200)
+    end_fill()
+    done()
