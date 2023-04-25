@@ -1,9 +1,25 @@
+from typing import TypeVar
+from src.data_structures.point_2d import Point2D
+
 
 class Package2D:
-    def __init__(self, w, h, with_rotation=False):
+    T = TypeVar('T', bound='Package2D')
+
+    def __init__(self, width: int, height: int, with_rotation=False):
         self.with_rotation = with_rotation
-        self.w = w
-        self.h = h
+        self.width = width
+        self.height = height
 
     def rotate(self) -> None:
-        self.w, self.h = self.h, self.w
+        self.width, self.height = self.height, self.width
+
+
+class PlacedPackage2D(Package2D):
+    def __init__(self, width: int, height: int, location: Point2D, with_rotation=False):
+        super().__init__(width, height, with_rotation)
+        self.location = location
+
+    @classmethod
+    def from_package(cls, package: Package2D, location: Point2D):
+        return cls(package.width, package.height, location, package.with_rotation)
+
