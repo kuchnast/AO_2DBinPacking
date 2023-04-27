@@ -8,7 +8,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.7",
     install_requires=[
-        "argparse ~= 1.4"
+        "argparse ~= 1.4",
+        "pandas",
+        "pandas-stubs"
     ],
     entry_points={'console_scripts': ['bin_packing_2d = main:main']}
 )

@@ -5,7 +5,7 @@ import itertools
 
 class Bin2D:
     def __init__(self, width, height):
-        self.packages = []
+        self.packages = []  # list(PlacedPackage2D)
         self.width = width
         self.height = height
         pass
@@ -13,29 +13,36 @@ class Bin2D:
     def is_empty(self) -> bool:
         return False if len(self.packages) else True
 
-    def insert(self, point: Point2D, package: Package2D) -> None:
-        self.packages.append(PlacedPackage2D.from_package(package, point))
+    def insert(self, location: Point2D, package: Package2D) -> None:
+        self.packages.append(PlacedPackage2D.from_package(package, location))
 
     @staticmethod
-    def _is_overlap(first_l: Point2D, first_r: Point2D, second_l: Point2D, second_r: Point2D):
-
-        # if rectangle has area 0, no overlap
-        if first_l.x == first_r.x or first_l.y == first_r.y or second_r.x == second_l.x or second_l.y == second_r.y:
-            return False
-
-        # If one rectangle is on left side of other
-        if first_l.x > second_r.x or second_l.x > first_r.x:
-            return False
-
-        # If one rectangle is above other
-        if first_r.y > second_l.y or second_r.y > first_l.y:
+    def _is_intersect(first: PlacedPackage2D, second: PlacedPackage2D):
+        if first.location.x >= second.location.x + second.width \
+                or first.location.x + first.width <= second.location.x \
+                or first.location.y + first.height >= second.location.y \
+                or first.location.y <= second.location.y + second.height:
             return False
 
         return True
 
+    @staticmethod
+    def _is_contains(outer: PlacedPackage2D, inner: PlacedPackage2D):
+        if inner.location.x >= outer.location.x \
+                and inner.location.y >= outer.location.y \
+                and inner.location.x + inner.width <= outer.location.x + outer.width \
+                and inner.location.y + inner.height <= outer.location.y + outer.height:
+            return True
+
+        return False
+
     def is_valid(self) -> bool:
+        box = PlacedPackage2D(self.width, self.height, Point2D(0, 0))
+        for el in self.packages:
+            if not self._is_contains(box, el):
+                return False
+
         for el1, el2 in itertools.combinations(self.packages, 2):
-            if self._is_overlap(el1.location, Point2D(el1.location.x + el1.width, el1.location.y + el1.height),
-                                el2.location, Point2D(el2.location.x + el2.width, el2.location.y + el2.height)):
+            if self._is_intersect(el1, el2) or self._is_contains(el1, el2) or self._is_contains(el2, el1):
                 return False
         return True
