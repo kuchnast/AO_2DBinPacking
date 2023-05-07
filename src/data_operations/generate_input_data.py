@@ -1,15 +1,17 @@
-from data_operations.data_generator import *
-import os
+from os import makedirs
+from os.path import exists
+from src.data_operations.data_operations import DataOperations
+
 
 if __name__ == "__main__":
-    dg = DataGenerator()
+    dg = DataOperations()
     packages_size = [10, 100, 1000]
     packages_max_size = [5, 10, 25]
     box_dim = [5, 10, 25]
     path = "./data/in"
 
-    if not os.path.exists(path):
-        os.makedirs(path)
+    if not exists(path):
+        makedirs(path)
 
     for size in packages_size:
         for box_width in box_dim:
@@ -19,5 +21,5 @@ if __name__ == "__main__":
                         if max_width > box_width or max_height > box_height:
                             continue
                         df = dg.generate_input_data(box_width, box_height, max_width, max_height, size)
-                        file_name = f's{size}_b{box_width}_{box_height}_p{max_width}_{max_height}.in'
-                        dg.save_to_file(path + '/' + file_name, df)
+                        file_name = dg.generate_input_file_name(box_width, box_height, max_width, max_height, size, 0)
+                        dg.save_to_file(path + "/" + file_name, df)

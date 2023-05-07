@@ -1,5 +1,4 @@
 import setuptools
-import setuptools_scm
 
 
 setuptools.setup(
@@ -10,7 +9,9 @@ setuptools.setup(
     install_requires=[
         "argparse ~= 1.4",
         "pandas",
-        "pandas-stubs"
+        "pandas-stubs",
+        "tabulate",
+        "types-tabulate"
     ],
     entry_points={'console_scripts': ['bin_packing_2d = main:main']}
 )

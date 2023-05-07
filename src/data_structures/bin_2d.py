@@ -1,11 +1,12 @@
+import itertools
 from src.data_structures.package_2d import Package2D, PlacedPackage2D
 from src.data_structures.point_2d import Point2D
-import itertools
+from typing import List
 
 
 class Bin2D:
-    def __init__(self, width, height):
-        self.packages = []  # list(PlacedPackage2D)
+    def __init__(self, width: int, height: int):
+        self.packages: List[PlacedPackage2D] = []
         self.width = width
         self.height = height
         pass
@@ -18,20 +19,24 @@ class Bin2D:
 
     @staticmethod
     def _is_intersect(first: PlacedPackage2D, second: PlacedPackage2D):
-        if first.location.x >= second.location.x + second.width \
-                or first.location.x + first.width <= second.location.x \
-                or first.location.y + first.height >= second.location.y \
-                or first.location.y <= second.location.y + second.height:
+        if (
+            first.location.x >= second.location.x + second.width
+            or first.location.x + first.width <= second.location.x
+            or first.location.y + first.height >= second.location.y
+            or first.location.y <= second.location.y + second.height
+        ):
             return False
 
         return True
 
     @staticmethod
     def _is_contains(outer: PlacedPackage2D, inner: PlacedPackage2D):
-        if inner.location.x >= outer.location.x \
-                and inner.location.y >= outer.location.y \
-                and inner.location.x + inner.width <= outer.location.x + outer.width \
-                and inner.location.y + inner.height <= outer.location.y + outer.height:
+        if (
+            inner.location.x >= outer.location.x
+            and inner.location.y >= outer.location.y
+            and inner.location.x + inner.width <= outer.location.x + outer.width
+            and inner.location.y + inner.height <= outer.location.y + outer.height
+        ):
             return True
 
         return False

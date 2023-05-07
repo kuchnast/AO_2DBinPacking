@@ -1,7 +1,11 @@
 import argparse
+from src.algorithms_launcher import run_algorithm, print_result
+from src.algorithms.next_fit_algorithm import NextFitAlgorithm
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"
+
+alg_collection = {"next_fit": NextFitAlgorithm}
 
 
 def main(parameters: Optional[Sequence[str]] = None):
@@ -9,15 +13,19 @@ def main(parameters: Optional[Sequence[str]] = None):
     parser.set_defaults(action=run)
     parser.add_argument("-v", "--version", action="version", version=f"bin_packing_2d {__version__}")
     parser.add_argument(
-        "-i", "--input", type=str, nargs="?", dest="input", default=None, required=True, help="Input file"
+        "-i", "--input", type=str, nargs="?", dest="input", default=None, required=True, help="Input file or directory"
     )
+
+    alg_keys = list(alg_collection.keys())
+    alg_keys.append("all")
     parser.add_argument(
         "-a",
         "--algorithm",
         type=str,
         nargs="?",
         dest="algorithm",
-        default="All",
+        default="all",
+        choices=alg_keys,
         help="Algorithm that will be executed or all if not set",
     )
     args = parser.parse_args(parameters)
@@ -25,7 +33,13 @@ def main(parameters: Optional[Sequence[str]] = None):
 
 
 def run(args):
-    print(args.input)
+    if args.algorithm == "all":
+        for alg in alg_collection.values():
+            result = run_algorithm(args.input, alg)
+            print_result(args.input, alg, result)
+    else:
+        result = run_algorithm(args.input, alg_collection[args.algorithm])
+        print_result(args.input, alg_collection[args.algorithm], result)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
-from typing import TypeVar
 from src.data_structures.point_2d import Point2D
+from typing import TypeVar
 
 
 class Package2D:
-    T = TypeVar('T', bound='Package2D')
+    T = TypeVar("T", bound="Package2D")
 
     def __init__(self, width: int, height: int, with_rotation=False):
         self.with_rotation = with_rotation
@@ -22,4 +22,3 @@ class PlacedPackage2D(Package2D):
     @classmethod
     def from_package(cls, package: Package2D, location: Point2D):
         return cls(package.width, package.height, location, package.with_rotation)
-
