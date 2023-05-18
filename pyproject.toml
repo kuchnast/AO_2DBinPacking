@@ -11,6 +11,14 @@ write_to = "_version.py"
 [tool.mypy]
 mypy_path = "src"
 
+[[tool.mypy.overrides]]
+module = "tabulate"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pandas"
+ignore_missing_imports = true
+
 [tool.black]
 line-length = 120
 

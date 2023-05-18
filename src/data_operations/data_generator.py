@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas
-from src.data_structures.package_2d import Package2D
+from data_structures.package_2d import Package2D
 from typing import List, TypeVar
 
 

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from src.data_structures.bin_2d import Bin2D
-from src.data_operations.data_generator import OnlineGenerator, OfflineGenerator, GeneratorBaseType, GeneratorBase
-from typing import List
+from data_structures.bin_2d import Bin2D
+from data_operations.data_generator import OnlineGenerator, OfflineGenerator, GeneratorBaseType
+from typing import List, Type
 
 """
 Base class for algorithms
@@ -9,8 +9,6 @@ Base class for algorithms
 
 
 class AlgorithmBase(ABC):
-    generator_class = None
-
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         self.data_generator = generator
         self.bin_width = bin_width
@@ -37,10 +35,13 @@ class AlgorithmBase(ABC):
             self.closed_bins.append(i)
         self.opened_bins.clear()
 
+    @staticmethod
+    @abstractmethod
+    def get_generator():
+        RuntimeError("Not implemented")
+
 
 class OnlineAlgorithm(AlgorithmBase):
-    generator_class = OnlineGenerator
-
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
         if not isinstance(self.data_generator, OnlineGenerator):
@@ -50,10 +51,12 @@ class OnlineAlgorithm(AlgorithmBase):
     def run(self):
         RuntimeError("Not implemented")
 
+    @staticmethod
+    def get_generator() -> Type[OnlineGenerator]:
+        return OnlineGenerator
+
 
 class OfflineAlgorithm(AlgorithmBase):
-    generator_class = OnlineGenerator
-
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
         if not isinstance(self.data_generator, OfflineGenerator):
@@ -62,3 +65,7 @@ class OfflineAlgorithm(AlgorithmBase):
     @abstractmethod
     def run(self):
         RuntimeError("Not implemented")
+
+    @staticmethod
+    def get_generator() -> Type[OfflineGenerator]:
+        return OfflineGenerator

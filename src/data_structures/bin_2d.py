@@ -1,6 +1,6 @@
 import itertools
-from src.data_structures.package_2d import Package2D, PlacedPackage2D
-from src.data_structures.point_2d import Point2D
+from data_structures.package_2d import Package2D, PlacedPackage2D
+from data_structures.point_2d import Point2D
 from typing import List
 
 

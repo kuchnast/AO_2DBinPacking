@@ -27,5 +27,8 @@ In order to run tests:
 To run just type command:
 > bin_packing_2d
 
+To generate random input data run:
+> generate_input_data
+
 Before submitting automatically format source files:
 >tox -e black

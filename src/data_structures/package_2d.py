@@ -1,4 +1,4 @@
-from src.data_structures.point_2d import Point2D
+from data_structures.point_2d import Point2D
 from typing import TypeVar
 
 

@@ -1,6 +1,6 @@
 import argparse
-from src.algorithms_launcher import run_algorithm, print_result
-from src.algorithms.next_fit_algorithm import NextFitAlgorithm
+from algorithms_launcher import run_algorithm, print_result
+from algorithms.next_fit_algorithm import NextFitAlgorithm
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"

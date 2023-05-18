@@ -1,8 +1,8 @@
 from os.path import join, isfile, isdir
-from src.algorithms.algorithm_base import AlgorithmBase
-from src.data_operations.data_operations import DataOperations
-from src.packing_stats import PackingResult, PackingStats
-from typing import Type
+from algorithms.algorithm_base import AlgorithmBase
+from data_operations.data_operations import DataOperations
+from packing_stats import PackingResult, PackingStats
+from typing import Type, cast, Dict
 
 
 def run_algorithm(
@@ -29,7 +29,7 @@ def print_result(path: str, algorithm: Type[AlgorithmBase], res: PackingStats | 
 
 
 def run_for_file(file: str, algorithm: Type[AlgorithmBase], with_validation=True) -> PackingResult | int:
-    gen = algorithm.generator_class(DataOperations().load_from_file(file))
+    gen = algorithm.get_generator()(DataOperations().load_from_file(file))
     alg = algorithm(gen.bin_width, gen.bin_height, gen)
     bins_num = alg.run()
 
@@ -57,7 +57,7 @@ def run_for_directory(directory: str, algorithm: Type[AlgorithmBase], with_valid
     files.sort(key=str.upper)
 
     for f in files:
-        gen = algorithm.generator_class(DataOperations().load_from_file(join(directory, f)))
+        gen = algorithm.get_generator()(DataOperations().load_from_file(join(directory, f)))
         alg = algorithm(gen.bin_width, gen.bin_height, gen)
         bins_num = alg.run()
 
@@ -67,6 +67,7 @@ def run_for_directory(directory: str, algorithm: Type[AlgorithmBase], with_valid
         parsed = do.parse_input_file_name(f)
         if parsed is None:
             RuntimeError("Invalid input file name")
+        parsed = cast(Dict[str, int], parsed)
         res = PackingResult(
             bins_num,
             parsed["size"],

@@ -1,8 +1,8 @@
-from src.algorithms.algorithm_base import OnlineAlgorithm
-from src.data_operations.data_generator import GeneratorBaseType
-from src.data_structures.bin_2d import Bin2D
-from src.data_structures.package_2d import Package2D
-from src.data_structures.point_2d import Point2D
+from algorithms.algorithm_base import OnlineAlgorithm
+from data_operations.data_generator import GeneratorBaseType
+from data_structures.bin_2d import Bin2D
+from data_structures.package_2d import Package2D
+from data_structures.point_2d import Point2D
 
 """
 Base class for algorithms

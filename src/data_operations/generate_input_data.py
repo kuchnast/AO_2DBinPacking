@@ -1,9 +1,9 @@
 from os import makedirs
 from os.path import exists
-from src.data_operations.data_operations import DataOperations
+from data_operations.data_operations import DataOperations
 
 
-if __name__ == "__main__":
+def generate_input_data() -> None:
     dg = DataOperations()
     packages_size = [10, 100, 1000]
     packages_max_size = [5, 10, 25]
@@ -23,3 +23,7 @@ if __name__ == "__main__":
                         df = dg.generate_input_data(box_width, box_height, max_width, max_height, size)
                         file_name = dg.generate_input_file_name(box_width, box_height, max_width, max_height, size, 0)
                         dg.save_to_file(path + "/" + file_name, df)
+
+
+if __name__ == "__main__":
+    generate_input_data()
