@@ -6,4 +6,4 @@ src/__pycache__/
 venv/
 _version.py
 *__pycache__*
-data/
+data/*

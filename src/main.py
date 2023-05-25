@@ -1,11 +1,12 @@
 import argparse
 from algorithms_launcher import run_algorithm, print_result
 from algorithms.next_fit_algorithm import NextFitAlgorithm
+from algorithms.first_fit_algorithm import FirstFitAlgorithm
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"
 
-alg_collection = {"next_fit": NextFitAlgorithm}
+alg_collection = {"next_fit": NextFitAlgorithm, "first_fit": FirstFitAlgorithm}
 
 
 def main(parameters: Optional[Sequence[str]] = None):
@@ -14,6 +15,9 @@ def main(parameters: Optional[Sequence[str]] = None):
     parser.add_argument("-v", "--version", action="version", version=f"bin_packing_2d {__version__}")
     parser.add_argument(
         "-i", "--input", type=str, nargs="?", dest="input", default=None, required=True, help="Input file or directory"
+    )
+    parser.add_argument(
+        "-p", "--plot", dest="plot", action='store_true', help="Plot results"
     )
 
     alg_keys = list(alg_collection.keys())
@@ -33,12 +37,13 @@ def main(parameters: Optional[Sequence[str]] = None):
 
 
 def run(args):
+    print(f'Running algorithm {args.algorithm} for {args.input}')
     if args.algorithm == "all":
         for alg in alg_collection.values():
-            result = run_algorithm(args.input, alg)
+            result, bins = run_algorithm(args.input, alg)
             print_result(args.input, alg, result)
     else:
-        result = run_algorithm(args.input, alg_collection[args.algorithm])
+        result, bins = run_algorithm(args.input, alg_collection[args.algorithm])
         print_result(args.input, alg_collection[args.algorithm], result)
 
 

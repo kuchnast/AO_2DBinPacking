@@ -22,9 +22,6 @@ class AlgorithmBase(ABC):
         RuntimeError("Not implemented")
 
     def is_valid(self) -> bool:
-        for bin in self.opened_bins:
-            if not bin.is_valid():
-                return False
         for bin in self.closed_bins:
             if not bin.is_valid():
                 return False

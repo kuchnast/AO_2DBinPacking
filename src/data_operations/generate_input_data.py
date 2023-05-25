@@ -25,5 +25,18 @@ def generate_input_data() -> None:
                         dg.save_to_file(path + "/" + file_name, df)
 
 
-if __name__ == "__main__":
-    generate_input_data()
+def generate_plotting_data() -> None:
+    dg = DataOperations()
+    packages_size = [10, 10, 100, 100]
+    packages_max_size = [5, 10, 10, 25]
+    box_dim = [5, 10, 10, 25]
+    path = "./data/plot"
+
+    if not exists(path):
+        makedirs(path)
+
+    for size, box_width, box_height, max_width, max_height in zip(packages_size, box_dim, box_dim, packages_max_size,
+                                                                  packages_max_size):
+        df = dg.generate_input_data(box_width, box_height, max_width, max_height, size)
+        file_name = dg.generate_input_file_name(box_width, box_height, max_width, max_height, size, 0)
+        dg.save_to_file(path + "/" + file_name, df)
