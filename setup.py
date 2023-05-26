@@ -4,7 +4,7 @@ setuptools.setup(
     name="bin_packing_2d",
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.7",
+    python_requires=">=3.10",
     install_requires=[
         "argparse ~= 1.4",
         "pandas-stubs",
