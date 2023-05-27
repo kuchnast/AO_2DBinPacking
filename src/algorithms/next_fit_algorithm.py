@@ -3,6 +3,7 @@ from data_operations.data_generator import GeneratorBaseType
 from data_structures.bin_2d import Bin2D
 from data_structures.package_2d import Package2D
 from data_structures.point_2d import Point2D
+from typing import List
 
 """
 Base class for algorithms
@@ -12,6 +13,7 @@ Base class for algorithms
 class NextFitAlgorithm(OnlineAlgorithm):
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
+        self.opened_bins: List[Bin2D] = []
         self._current_height = 0
         self._current_width = 0
         self._next_height = 0

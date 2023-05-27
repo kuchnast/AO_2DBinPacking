@@ -4,8 +4,8 @@ from data_structures.bin_2d import Bin2D
 from data_structures.package_2d import Package2D
 from data_structures.point_2d import Point2D
 from collections import deque
-from dataclasses import InitVar, dataclass, field
-from typing import List, Tuple
+from dataclasses import dataclass, field
+from typing import List
 
 """
 Base class for algorithms
@@ -21,7 +21,7 @@ class OpenedBin:
 class FirstFitAlgorithm(OnlineAlgorithm):
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
-        self.opened_bins: deque[OpenedBin] = deque()
+        self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
 
     def _check_if_fit(self, loc: Point2D, package: Package2D):
@@ -44,7 +44,7 @@ class FirstFitAlgorithm(OnlineAlgorithm):
         self.opened_bins.clear()
 
     def _pack(self, package: Package2D) -> None:
-        to_close = []
+        to_close: List[OpenedBin] = []
 
         for ob in self.opened_bins:
             for i in range(len(ob.levels)):

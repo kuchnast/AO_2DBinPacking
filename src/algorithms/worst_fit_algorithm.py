@@ -4,8 +4,8 @@ from data_structures.bin_2d import Bin2D
 from data_structures.package_2d import Package2D
 from data_structures.point_2d import Point2D
 from collections import deque
-from dataclasses import InitVar, dataclass, field
-from typing import List, Tuple
+from dataclasses import dataclass, field
+from typing import List
 
 """
 Base class for algorithms
@@ -21,7 +21,7 @@ class OpenedBin:
 class WorstFitAlgorithm(OnlineAlgorithm):
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
-        self.opened_bins: deque[OpenedBin] = deque()
+        self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
 
     def _check_if_fit(self, loc: Point2D, package: Package2D):
@@ -46,23 +46,23 @@ class WorstFitAlgorithm(OnlineAlgorithm):
     def _pack(self, package: Package2D) -> None:
         to_close = []
 
-        fitting_bins=[]
+        fitting_bins = []
         for ob in self.opened_bins:
             for i in range(len(ob.levels)):
                 width, height = ob.levels[i]
                 if self._check_if_fit(Point2D(width, height), package):
                     fitting_bins.append((ob, width, height, i))
-                    
+
             if not len(ob.levels):
                 # if box has not free levels, close it
                 to_close.append(ob)
 
-        if len(fitting_bins)>0:
-            fitting_bins.sort(key=lambda x: x[1] if x[1]!=0 else float('inf'), reverse=False)
-            fitting_bins=[bin for bin in fitting_bins if bin[1]==fitting_bins[0][1]]
-            fitting_bins.sort(key=lambda x: x[0].bin.height)               #Fix width sorting
+        if len(fitting_bins) > 0:
+            fitting_bins.sort(key=lambda x: x[1] if x[1] != 0 else float("inf"), reverse=False)
+            fitting_bins = [bin for bin in fitting_bins if bin[1] == fitting_bins[0][1]]
+            fitting_bins.sort(key=lambda x: x[0].bin.height)  # Fix width sorting
 
-            ob, width, height, i=fitting_bins[0]
+            ob, width, height, i = fitting_bins[0]
 
             assert self._check_if_fit(Point2D(width, height), package)
             assert self._insert_if_fit(ob, Point2D(width, height), package)
@@ -80,7 +80,6 @@ class WorstFitAlgorithm(OnlineAlgorithm):
                 self.closed_bins.append(el.bin)
                 self.opened_bins.remove(el)
             return
-            
 
         # if no free space in other boxes, create new
         self._open_bin()
