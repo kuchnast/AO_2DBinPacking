@@ -1,13 +1,17 @@
 import argparse
 from algorithms_launcher import run_algorithm, print_result
 from algorithms.next_fit_algorithm import NextFitAlgorithm
+from algorithms.best_fit_algorithm import BestFitAlgorithm
 from algorithms.first_fit_algorithm import FirstFitAlgorithm
 from algorithms.worst_fit_algorithm import WorstFitAlgorithm
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"
 
-alg_collection = {"next_fit": NextFitAlgorithm, "first_fit": FirstFitAlgorithm, "worst_fit": WorstFitAlgorithm}
+alg_collection = {"next_fit": NextFitAlgorithm,
+                  "first_fit": FirstFitAlgorithm,
+                  "best_fit": BestFitAlgorithm,
+                  "worst_fit": WorstFitAlgorithm}
 
 
 def main(parameters: Optional[Sequence[str]] = None):
