@@ -9,3 +9,6 @@ class Point2D:
 
     def __call__(self, *args, **kwargs):
         return self.x, self.y
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"

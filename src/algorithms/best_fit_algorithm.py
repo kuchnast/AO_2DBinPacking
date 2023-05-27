@@ -3,88 +3,110 @@ from data_operations.data_generator import GeneratorBaseType
 from data_structures.bin_2d import Bin2D
 from data_structures.package_2d import Package2D
 from data_structures.point_2d import Point2D
+from dataclasses import dataclass, field
+from typing import List, Tuple
+from collections import deque
 
 """
 Base class for algorithms
 """
 
 
-class Row():  # klasa dodana przeze mnie
-    def __init__(self, w, h1, h2):
-        self.width = w
-        self.bottomheight = h1
-        self.upperheight = h2
+@dataclass
+class OpenedBin:
+    bin: Bin2D
+    levels: List[List[int]] = field(default_factory=list)  # available levels for bin list((width, height))
 
 
 class BestFitAlgorithm(OnlineAlgorithm):
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
-        self.row_list = []  # dodane przeze mnie
+        self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
 
-    def _check_if_fit(self, loc: Point2D, package: Package2D):
-        if loc.x + package.width > self.bin_width or loc.y + package.height > self.bin_height:
+    def _check_if_fit(self, loc: Point2D, top_height: int, package: Package2D):
+        if loc.x + package.width > self.bin_width or loc.y + package.height > top_height:
             return False
         return True
 
-    def _insert_if_fit(self, loc: Point2D, package: Package2D):
-        if self._check_if_fit(loc, package):
-            self.opened_bins[0].insert(loc, package)
+    def _insert_if_fit(self, opened_bin: OpenedBin, loc: Point2D, package: Package2D):
+        top_height = opened_bin.bin.height
+        for level in reversed(opened_bin.levels):
+            if level[1] > loc.y:
+                top_height = level[1]
+            else:
+                break
+
+        if self._check_if_fit(loc, top_height, package):
+            opened_bin.bin.insert(loc, package)
             return True
         return False
 
+    def _get_left_width_for_fit(self, opened_bin: OpenedBin, loc: Point2D, package: Package2D) -> int | None:
+        top_height = opened_bin.bin.height
+        for level in reversed(opened_bin.levels):
+            if level[1] > loc.y:
+                top_height = level[1]
+            else:
+                break
+
+        if self._check_if_fit(loc, top_height, package):
+            return self.bin_width - loc.x + package.width
+        return None
+
     def _open_bin(self):
-        self.opened_bins.append(Bin2D(self.bin_width, self.bin_height))
+        self.opened_bins.append(OpenedBin(Bin2D(self.bin_width, self.bin_height), [[0, 0]]))
+
+    def _close_all(self) -> None:
+        for i in self.opened_bins:
+            self.closed_bins.append(i.bin)
+        self.opened_bins.clear()
+    @staticmethod
+    def _pack_in_best_loc(best_loc: Tuple[OpenedBin, Point2D, int], package: Package2D) -> None:
+        opened_bin, loc, level_idx = best_loc
+        opened_bin.bin.insert(loc, package)
+
+        if loc.x == 0 and loc.y + package.height < opened_bin.bin.height:
+            # if beginning of row, create new one above
+            opened_bin.levels.append([0, loc.y + package.height])
+        opened_bin.levels[level_idx][0] += package.width
 
     def _pack(self, package: Package2D) -> None:
+        best_loc: (OpenedBin, Point2D, int) = None
+        width_left_for_best_loc: int | None = None
 
-        min_spaces = []  # lista ktora przechowuje wolne miejsca w rzedach
+        for ob in self.opened_bins:  # loop over all levels of all bins
+            for level_idx in range(len(ob.levels)):
+                width, height = ob.levels[level_idx]
+                left_width = self._get_left_width_for_fit(ob, Point2D(width, height), package)
 
-        for box in self.opened_bins:
-            self.row_list.append([])
-            if len(self.row_list) == 0:  # czy lista pusta
+                if left_width is not None:
+                    if left_width == 0:  # package left no free space on this level, so it is just best choice
+                        best_loc = (ob, Point2D(width, height), level_idx)
+                        self._pack_in_best_loc(best_loc, package)
+                        return
+                    elif width_left_for_best_loc is None:  # empty best_loc, first search and assign
+                        width_left_for_best_loc = left_width
+                        best_loc = (ob, Point2D(width, height), level_idx)
+                    elif width_left_for_best_loc > left_width:  # found space with less loss
+                        width_left_for_best_loc = left_width
+                        best_loc = (ob, Point2D(width, height), level_idx)
 
-                if self._insert_if_fit(Point2D(0, 0), package):  # wkladam boxa w punkcie 0,0
+        if width_left_for_best_loc is not None:  # best package found with minimal lose
+            self._pack_in_best_loc(best_loc, package)
+            return
 
-                    print(self.opened_bins.index(box))
-                    self.row_list[self.opened_bins.index(box)].append(Row(package.width, package.height,0))  # dodaje pierwszy rzad z aktualna zajeta szerokoscia i wysokosself._current_height = self._next_height
-                    print(self.row_list[self.opened_bins.index(box)][0])
+        # if no free space in other boxes, create new
+        self._open_bin()
+        width, height = self.opened_bins[-1].levels[0]
+        if self._insert_if_fit(self.opened_bins[-1], Point2D(width, height), package):
+            if height + package.height < self.opened_bins[-1].bin.height:
+                # if new level can be added, create new one above
+                self.opened_bins[-1].levels.append([0, height + package.height])
+            self.opened_bins[-1].levels[0][0] += package.width
+            return
 
-            for row in self.row_list[self.opened_bins.index(box)]:  # ide teraz po rzedach
-
-                if row.width != self.bin_width:  # sprawdzam czy rzad ma jakies wolne miejsce na boxa
-
-                    if package.width < box.width - row.width or package.height <= row.height:  # sprawdzam czy box sie miesci
-
-                        free_space = row.width - package.width  # licze ile by zostalo miejsca
-                        min_spaces.append(self.opened_bins.index(box, row.index, free_space))
-
-                else:
-                    continue
-            # dalsze kroki -> wylonic min wolne miejsce aby wstawic boxa, jesli lista jest pusta to tworzy nowego boxa i dodaje rzad
-
-        if len(min_spaces) != 0:  # jesli znalazlo jakakolwiek wolna przestrzen dla nowego pudelka
-
-            var_min = [0, 0, 0]
-
-            for i in min_spaces:  # szuka minimum z wolnych przestrzeni
-                if var_min[2] < i[2]:
-                    var_min = i
-
-            if self._insert_if_fit(Point2D(self.row_list[var_min[0]][var_min[1]].width,self.row_list[var_min[0]][var_min[1]].bottomheight), package):
-                self.row_list[var_min[0]][var_min[1]].width += package.width  # wpierdalam tutaj pudelko w wolna przestrzen i aktualizuje szerokosc w rzedzie, wysokosci nie musze bo jest taka sama
-
-        elif self._insert_if_fit(Point2D(0, self.row_list[-1][-1].upperheight), package):  # insert package in new row
-            self.row_list[-1].append(Row(package.width, package.height, 0))
-
-        else:  # open new bin
-            self._open_bin()
-            if self._insert_if_fit(Point2D(0, 0), package):
-                self.row_list[-1].append(Row(package.width, package.height, 0))
-            else:
-                RuntimeError("Package bigger than bin")
-
-        min_spaces.clear()
+        RuntimeError("Package bigger than bin")
 
     def run(self) -> int:
         while True:

@@ -15,7 +15,7 @@ Base class for algorithms
 @dataclass
 class OpenedBin:
     bin: Bin2D
-    levels: List[List[int]] = field(default_factory=list)  # available levels for bin deque((width, height))
+    levels: List[List[int]] = field(default_factory=list)  # available levels for bin list([width, height])
 
 
 class FirstFitAlgorithm(OnlineAlgorithm):
@@ -24,13 +24,20 @@ class FirstFitAlgorithm(OnlineAlgorithm):
         self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
 
-    def _check_if_fit(self, loc: Point2D, package: Package2D):
-        if loc.x + package.width > self.bin_width or loc.y + package.height > self.bin_height:
+    def _check_if_fit(self, loc: Point2D, top_height: int, package: Package2D):
+        if loc.x + package.width > self.bin_width or loc.y + package.height > top_height:
             return False
         return True
 
     def _insert_if_fit(self, opened_bin: OpenedBin, loc: Point2D, package: Package2D):
-        if self._check_if_fit(loc, package):
+        top_height = opened_bin.bin.height
+        for level in reversed(opened_bin.levels):
+            if level[1] > loc.y:
+                top_height = level[1]
+            else:
+                break
+
+        if self._check_if_fit(loc, top_height, package):
             opened_bin.bin.insert(loc, package)
             return True
         return False
@@ -44,8 +51,6 @@ class FirstFitAlgorithm(OnlineAlgorithm):
         self.opened_bins.clear()
 
     def _pack(self, package: Package2D) -> None:
-        to_close: List[OpenedBin] = []
-
         for ob in self.opened_bins:
             for i in range(len(ob.levels)):
                 width, height = ob.levels[i]
@@ -53,20 +58,9 @@ class FirstFitAlgorithm(OnlineAlgorithm):
                     if width == 0 and height + package.height < ob.bin.height:
                         # if beginning of row, create new one above
                         ob.levels.append([0, height + package.height])
-
                     ob.levels[i][0] += package.width
 
-                    if ob.levels[i][0] == ob.bin.width:
-                        # if row is full, remove it from list
-                        ob.levels.pop(i)
-
-                    for el in to_close:
-                        self.closed_bins.append(el.bin)
-                        self.opened_bins.remove(el)
                     return
-            if not len(ob.levels):
-                # if box has not free levels, close it
-                to_close.append(ob)
 
         # if no free space in other boxes, create new
         self._open_bin()
@@ -75,16 +69,7 @@ class FirstFitAlgorithm(OnlineAlgorithm):
             if width == 0 and height + package.height < self.opened_bins[-1].bin.height:
                 # if beginning of row, create new one above
                 self.opened_bins[-1].levels.append([0, height + package.height])
-
             self.opened_bins[-1].levels[0][0] += package.width
-
-            if width == self.opened_bins[-1].bin.width:
-                # if row is full, remove it from list
-                self.opened_bins[-1].levels.pop(0)
-
-            for el in to_close:
-                self.closed_bins.append(el.bin)
-                self.opened_bins.remove(el)
 
             return
 

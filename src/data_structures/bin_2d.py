@@ -11,6 +11,12 @@ class Bin2D:
         self.height = height
         pass
 
+    def __str__(self):
+        temp = ""
+        for package in self.packages:
+            temp += f"{package.__str__()}, "
+        return f"size: {self.width}x{self.height} packages: [{temp[:-2]}]"
+
     def is_empty(self) -> bool:
         return False if len(self.packages) else True
 

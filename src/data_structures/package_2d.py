@@ -19,6 +19,9 @@ class PlacedPackage2D(Package2D):
         super().__init__(width, height, with_rotation)
         self.location = location
 
+    def __str__(self):
+        return f"size: {self.width}x{self.height} loc: {self.location}"
+
     @classmethod
     def from_package(cls, package: Package2D, location: Point2D):
         return cls(package.width, package.height, location, package.with_rotation)
