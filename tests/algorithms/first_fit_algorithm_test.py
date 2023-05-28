@@ -11,7 +11,7 @@ WITH_BLOCK = True
 
 
 def test_if_create_2_bins_for_literature_example():
-    gen = OnlineGenerator(DataOperations().load_from_file('data/plot/s_10_b_5_5_p_5_5_n_0.in'))
+    gen = OnlineGenerator(DataOperations().load_from_file('tests/data/test1.in'))
     alg = FirstFitAlgorithm(gen.bin_width, gen.bin_height, gen)
 
     alg.run()
@@ -19,7 +19,7 @@ def test_if_create_2_bins_for_literature_example():
     for i in alg.closed_bins:
         print(i)
 
-    # assert alg.run() == 2
+    assert alg.run() == 2
     assert alg.is_valid()
 
     if WITH_PRINT:

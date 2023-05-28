@@ -27,9 +27,9 @@ def generate_input_data() -> None:
 
 def generate_plotting_data() -> None:
     dg = DataOperations()
-    packages_size = [10, 10, 100, 100]
-    packages_max_size = [5, 10, 10, 25]
-    box_dim = [5, 10, 10, 25]
+    packages_size = [10, 10, 100, 100, 50]
+    packages_max_size = [5, 10, 10, 25, 10]
+    box_dim = [5, 10, 10, 25, 20]
     path = "./data/plot"
 
     if not exists(path):

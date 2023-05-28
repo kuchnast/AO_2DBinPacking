@@ -1,15 +1,14 @@
 import itertools
 from data_structures.package_2d import Package2D, PlacedPackage2D
 from data_structures.point_2d import Point2D
+from data_structures.rectangle import Rectangle
 from typing import List
 
 
-class Bin2D:
+class Bin2D(Rectangle):
     def __init__(self, width: int, height: int):
+        super().__init__(width, height)
         self.packages: List[PlacedPackage2D] = []
-        self.width = width
-        self.height = height
-        pass
 
     def __str__(self):
         temp = ""
