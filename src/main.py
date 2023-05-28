@@ -4,6 +4,8 @@ from algorithms.next_fit_algorithm import NextFitAlgorithm
 from algorithms.best_fit_algorithm import BestFitAlgorithm
 from algorithms.first_fit_algorithm import FirstFitAlgorithm
 from algorithms.worst_fit_algorithm import WorstFitAlgorithm
+from algorithms.best_short_side_first import BestShortSideFitAlgorithm
+from algorithms.best_long_side_first import BestLongSideFitAlgorithm
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"
@@ -13,6 +15,8 @@ alg_collection = {
     "first_fit": FirstFitAlgorithm,
     "best_fit": BestFitAlgorithm,
     "worst_fit": WorstFitAlgorithm,
+    "best_short_side_first": BestShortSideFitAlgorithm,
+    "best_long_side_first": BestLongSideFitAlgorithm,
 }
 
 
