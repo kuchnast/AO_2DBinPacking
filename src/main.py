@@ -6,6 +6,7 @@ from algorithms.first_fit_algorithm import FirstFitAlgorithm
 from algorithms.worst_fit_algorithm import WorstFitAlgorithm
 from algorithms.best_short_side_first import BestShortSideFitAlgorithm
 from algorithms.best_long_side_first import BestLongSideFitAlgorithm
+from ploting import plot_bins2d
 from typing import Optional, Sequence
 
 __version__ = "1.0.0"
@@ -48,13 +49,22 @@ def main(parameters: Optional[Sequence[str]] = None):
 def run(args):
     print(f"Running algorithm {args.algorithm} for {args.input}")
     if args.algorithm == "all":
-        for alg in alg_collection.values():
+        for alg_name, alg in alg_collection.items():
             result, bins = run_algorithm(args.input, alg)
             print_result(args.input, alg, result)
+            if args.plot:
+                plot_bins2d(bins, plot_title=alg_name)
+                from matplotlib import pyplot as plt
+        if args.plot:
+            plt.show()
     else:
         result, bins = run_algorithm(args.input, alg_collection[args.algorithm])
         print_result(args.input, alg_collection[args.algorithm], result)
 
+
+
+
+#run_algorithm(algorithm=)
 
 if __name__ == "__main__":
     main()
