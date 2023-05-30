@@ -41,3 +41,23 @@ def generate_plotting_data() -> None:
         df = dg.generate_input_data(box_width, box_height, max_width, max_height, size)
         file_name = dg.generate_input_file_name(box_width, box_height, max_width, max_height, size, 0)
         dg.save_to_file(path + "/" + file_name, df)
+
+
+def generate_summary_data() -> None:
+    dg = DataOperations()
+    count = 100
+    packages_size = [10, 50, 100, 500, 1000]
+    packages_max_size = [10, 50, 100, 500, 1000]
+    box_dim = [10, 50, 100, 500, 1000]
+    path = "./data/summary"
+
+    if not exists(path):
+        makedirs(path)
+
+    for size, box_width, box_height, max_width, max_height in zip(
+        packages_size, box_dim, box_dim, packages_max_size, packages_max_size
+    ):
+        for i in range(count):
+            df = dg.generate_input_data(box_width, box_height, max_width, max_height, size)
+            file_name = dg.generate_input_file_name(box_width, box_height, max_width, max_height, size, i)
+            dg.save_to_file(path + "/" + file_name, df)

@@ -21,6 +21,7 @@ def add_bin2d_to_plot(ax: plt.Axes, bin: Bin2D):
         cy = ry + r.get_height() / 2.0
         ax.annotate(package.id, (cx, cy), color='black', weight='bold', fontsize=10, ha='center', va='center')
 
+
 def plot_bins2d(bins: List[Bin2D], block=False, plot_title=None):
     bin_num = len(bins)
     fig, ax = plt.subplots(1, bin_num)
@@ -28,6 +29,6 @@ def plot_bins2d(bins: List[Bin2D], block=False, plot_title=None):
         add_bin2d_to_plot(ax[i], bins[i])
 
     if plot_title is not None:
-        plt.title(plot_title)
+        fig.suptitle(plot_title, fontsize=16)
 
     plt.show(block=block)

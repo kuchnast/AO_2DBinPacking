@@ -11,10 +11,12 @@ setuptools.setup(
         "pandas",
         "types-tabulate",
         "tabulate",
-        "matplotlib"
+        "matplotlib",
+        "jinja2"
     ],
     entry_points={'console_scripts':
                   ['bin_packing_2d = main:main',
                    'generate_input_data = data_operations.generate_input_data:generate_input_data',
-                   'generate_plotting_data = data_operations.generate_input_data:generate_plotting_data']}
+                   'generate_plotting_data = data_operations.generate_input_data:generate_plotting_data',
+                   'generate_summary_data = data_operations.generate_input_data:generate_summary_data']}
 )

@@ -24,6 +24,10 @@ class BestFitAlgorithm(OnlineAlgorithm):
         self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
 
+    @staticmethod
+    def get_name():
+        return "Best Fit Algorithm"
+
     def _check_if_fit(self, loc: Point2D, top_height: int, package: Package2D):
         if loc.x + package.width > self.bin_width or loc.y + package.height > top_height:
             return False

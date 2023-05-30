@@ -19,6 +19,10 @@ class NextFitAlgorithm(OnlineAlgorithm):
         self._next_height = 0
         self._open_bin()
 
+    @staticmethod
+    def get_name():
+        return "Next Fit Algorithm"
+
     def _check_if_fit(self, loc: Point2D, package: Package2D):
         if loc.x + package.width > self.bin_width or loc.y + package.height > self.bin_height:
             return False

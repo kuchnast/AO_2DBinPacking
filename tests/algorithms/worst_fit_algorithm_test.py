@@ -1,8 +1,6 @@
-import pytest
-
 from data_operations.data_operations import DataOperations
 from data_operations.data_generator import OnlineGenerator
-from algorithms.worst_fit_algorithm import WorstFitAlgorithm
+from temp.worst_fit_algorithm import WorstFitAlgorithm
 from ploting import plot_bins2d
 
 WITH_PRINT = True

@@ -9,6 +9,7 @@ Base class for algorithms
 
 
 class AlgorithmBase(ABC):
+
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         self.data_generator = generator
         self.bin_width = bin_width
@@ -16,6 +17,11 @@ class AlgorithmBase(ABC):
         self.opened_bins: List[Bin2D] = []
         self.closed_bins: List[Bin2D] = []
         super().__init__()
+
+    @staticmethod
+    @abstractmethod
+    def get_name():
+        RuntimeError("Not implemented")
 
     @abstractmethod
     def run(self):

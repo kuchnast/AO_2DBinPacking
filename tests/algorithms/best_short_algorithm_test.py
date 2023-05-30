@@ -1,8 +1,6 @@
-import pytest
-
 from data_operations.data_operations import DataOperations
 from data_operations.data_generator import OnlineGenerator
-from algorithms.best_short_side_first import BestShortSideFitAlgorithm
+from temp.best_short_side_first import BestShortSideFitAlgorithm
 from ploting import plot_bins2d
 
 WITH_PRINT = True

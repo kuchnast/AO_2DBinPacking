@@ -18,11 +18,15 @@ class OpenedBin:
     levels: List[List[int]] = field(default_factory=list)  # available levels for bin list((width, height))
 
 
-class BestLongSideFitAlgorithm(OnlineAlgorithm):
+class BestShortSideFitAlgorithm(OnlineAlgorithm):
     def __init__(self, bin_width: int, bin_height: int, generator: GeneratorBaseType):
         super().__init__(bin_width, bin_height, generator)
         self.opened_bins: deque[OpenedBin] = deque()  # type: ignore
         self._open_bin()
+
+    @staticmethod
+    def get_name():
+        return "Best Short Side Fit Algorithm"
 
     def _check_if_fit(self, loc: Point2D, top_height: int, package: Package2D):
         if loc.x + package.width > self.bin_width or loc.y + package.height > top_height:
@@ -53,17 +57,17 @@ class BestLongSideFitAlgorithm(OnlineAlgorithm):
     def _pack(self, package: Package2D) -> None:
         best_bin = None
         best_level = None
-        best_long_side = float('inf')
+        best_short_side = float('inf')
 
         for ob in self.opened_bins:
             for i in range(len(ob.levels)):
                 width, height = ob.levels[i]
-                long_side = max(ob.bin.width - width, ob.bin.height - height)
-                free_space_area = long_side * min(ob.bin.width - width, ob.bin.height - height)
-                if self._check_if_fit(Point2D(width, height), ob.bin.height, package) and free_space_area < best_long_side:
+                short_side = min(ob.bin.width - width, ob.bin.height - height)
+                free_space_area = short_side * (ob.bin.width - width)
+                if self._check_if_fit(Point2D(width, height), ob.bin.height, package) and free_space_area < best_short_side:
                     best_bin = ob
                     best_level = i
-                    best_long_side = free_space_area
+                    best_short_side = free_space_area
 
         if best_bin is not None:
             width, height = best_bin.levels[best_level]
