@@ -5,8 +5,8 @@ from data_operations.data_generator import OnlineGenerator
 from algorithms.best_fit_algorithm import BestFitAlgorithm
 from ploting import plot_bins2d
 
-WITH_PRINT = True
-WITH_BLOCK = True
+WITH_PRINT = False
+WITH_BLOCK = False
 
 
 def test_if_create_3_bins_for_literature_example():

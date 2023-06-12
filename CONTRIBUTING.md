@@ -1,5 +1,5 @@
-#Contributing guide
-### Main information if you would like to help in this project
+# Contributing guide
+### Main informations if you would like to help in this project
 
 ### 1. Fork
 > git clone **<FORK_GIT_REPO_PATH>**
@@ -40,6 +40,9 @@ To run script just type command:
 
 By default, all algorithms are launched. To run only specific algorithm type:
 > bin_packing_2d -i [input file or directory] -a [algorithm_name]
+ 
+To run script with plotting type command:
+> bin_packing_2d -i [input file or directory] -p
 
 Algorithm names can be found by typing ***bin_packing_2d -h***
 
@@ -49,8 +52,12 @@ To generate random input data run:
  or
 > 
 > generate_plotting_data
+> 
+ or
+> 
+> generate_summary_data
 
-Files will be saved to data/in or data/plot.
+Files will be saved to data/in, data/plot or data/summary.
 
 Before submitting automatically format source files:
 >tox -e black

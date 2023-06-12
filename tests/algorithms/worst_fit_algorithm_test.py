@@ -1,10 +1,10 @@
 from data_operations.data_operations import DataOperations
 from data_operations.data_generator import OnlineGenerator
-from temp.worst_fit_algorithm import WorstFitAlgorithm
+from algorithms.worst_fit_algorithm import WorstFitAlgorithm
 from ploting import plot_bins2d
 
-WITH_PRINT = True
-WITH_BLOCK = True
+WITH_PRINT = False
+WITH_BLOCK = False
 
 
 def test_if_create_2_bins_for_literature_example():

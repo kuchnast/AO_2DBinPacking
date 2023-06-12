@@ -6,8 +6,8 @@ from algorithms.first_fit_algorithm import FirstFitAlgorithm
 from ploting import plot_bins2d
 import pprint
 
-WITH_PRINT = True
-WITH_BLOCK = True
+WITH_PRINT = False
+WITH_BLOCK = False
 
 
 def test_if_create_2_bins_for_literature_example():
